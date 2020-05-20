@@ -1,0 +1,30 @@
+{
+  "name": "employee-tracker",
+  "version": "1.0.0",
+  "description": "CLI for keeping track of employees",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/eric-purrington/Employee-Tracker.git"
+  },
+  "keywords": [
+    "employee",
+    "tracker",
+    "cli"
+  ],
+  "author": "Eric Purrington",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/eric-purrington/Employee-Tracker/issues"
+  },
+  "homepage": "https://github.com/eric-purrington/Employee-Tracker#readme",
+  "dependencies": {
+    "console.table": "^0.10.0",
+    "inquirer": "^7.1.0",
+    "mysql": "^2.18.1"
+  }
+}
