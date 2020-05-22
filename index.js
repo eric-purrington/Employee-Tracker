@@ -17,6 +17,7 @@ connection.connect(function(err) {
 });
 
 const startScreenOptions = ["Add Department", "Add Role", "Add Employee", "View All Employees", "View All Employees By Department", "View All Employees By Role", "View All Employees By Manager", "View Roles", "View Departments", "Update Employee", "Remove Employee", "Remove Department", "Remove Role", "Exit"];
+
 const startScreenQ = [
     {
         type: "list",
@@ -80,7 +81,7 @@ function init() {
 }
 
 function viewAllEmployees() {
-    connection.query("select employees.id, first_name, last_name, title, department, salary from employees join roles on role_id=roles.id join departments on department_id=departments.id", function (err, res) {
+    connection.query("select a.id, a.first_name, a.last_name, title, department, salary, b.last_name from employees a join roles on role_id=roles.id join departments on department_id=departments.id left join employees b on a.manager_id = b.id", function (err, res) {
         console.table(res);
     });
     init();

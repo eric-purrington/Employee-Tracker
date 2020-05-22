@@ -1,0 +1,10 @@
+insert into departments (department) values ("IT");
+insert into departments (department) values ("Upper Management");
+insert into roles (title, salary, department_id) values ("IT Manager", "10000", 1);
+insert into roles (title, salary, department_id) values ("IT Technician", "5000", 1);
+insert into roles (title, salary, department_id) values ("Founder", "20000", 2);
+insert into employees (first_name, last_name, role_id, manager_id) values ("Maurice", "Moss", 2, 4);
+insert into employees (first_name, last_name, role_id, manager_id) values ("Roy", "Trenneman", 2, 4);
+insert into employees (first_name, last_name, role_id, manager_id) values ("Richmond", "Avenal", 2, 4);
+insert into employees (first_name, last_name, role_id, manager_id) values ("Jen", "Barber", 1, 5);
+insert into employees (first_name, last_name, role_id) values ("Douglas", "Reynholm", 3);
