@@ -2,7 +2,7 @@
 A node command-line application for keeping track of employees
 
 
-![Gif Demonstration]()
+![Gif Demonstration](assets/Employee-Tracker.gif)
 
 
 ## Table of Contents 
@@ -22,8 +22,11 @@ A node command-line application for keeping track of employees
 
 ## Description
 
-I yeam desc.
-Find a video demonstration [here]()
+This CLI allows a user to view and manage departments, roles, and employees through a database with just three tables.                                  
+Each row of the departments table holds a department and id.                                                       
+Each row of the roles table holds a title, salary, id, and department_id which links to the departments table.                                                  
+Each row in the employees table holds a first and last name, a role_id which links to the roles table, a manager_id that links to a different employee, and an id.                      
+[Video demonstration](https://eric-purrington.github.io/Employee-Tracker)
 
 ## Installation
 
