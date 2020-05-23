@@ -165,9 +165,14 @@ function readTrackerDB() {
         // departmentObjArr = [];
         // departmentArr = [];
         for (let i = 0; i < res.length; i++) {
-            departmentObjArr.push(res[i]);
+            if (departmentObjArr[i].department.indexOf(res[i].department) === -1) {
+                departmentObjArr.push(res[i]);
+            }
+            // departmentObjArr.push(res[i]);
             if (departmentArr.indexOf(res[i].department) === -1) {
                 departmentArr.push(res[i].department);
+                // ?????????????????? maybemaybemaybe
+                departmentObjArr.push(res[i]);
             }
         }
         // console.log(departmentArr);
