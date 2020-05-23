@@ -401,9 +401,11 @@ function updateEmployeeRole() {
         connection.query("UPDATE employees SET ? WHERE ?",
             [
                 {
-                role_id: toUpdateEmployeeRoleID
+                    role_id: toUpdateEmployeeRoleID
                 }, {
-                first_name: answers.toUpdateEmployee.split(" ")[0]
+                    first_name: answers.toUpdateEmployee.split(" ")[0]
+                }, {
+                    last_name: answers.toUpdateEmployee.split(" ")[1]
                 }
             ],
             function (err, res) {
@@ -424,12 +426,14 @@ function updateEmployeeManager() {
             }
         }
     
-        connection.query("UPDATE employees SET ? WHERE ?",
+        connection.query("UPDATE employees SET ? WHERE ? and ?",
             [
                 {
-                manager_id: toUpdateEmployeeManagerID
+                    manager_id: toUpdateEmployeeManagerID
                 }, {
-                first_name: answers.toUpdateEmployee.split(" ")[0]
+                    first_name: answers.toUpdateEmployee.split(" ")[0]
+                }, {
+                    last_name: answers.toUpdateEmployee.split(" ")[1]
                 }
             ],
             function (err, res) {
@@ -441,10 +445,15 @@ function updateEmployeeManager() {
 
 function removeEmployee() {
     inquirer.prompt(removeEmployeeQ).then(answer => {
-        connection.query("DELETE FROM employees WHERE ?",
-            {
-                first_name: answer.toRemoveEmployee.split(" ")[0]
-            }, function (err, res) {
+        connection.query("DELETE FROM employees WHERE ? and ?",
+            [
+                {
+                    first_name: answer.toRemoveEmployee.split(" ")[0]
+                }, {
+                    last_name: answers.toRemoveEmployee.split(" ")[1]
+                }
+            ],
+            function (err, res) {
                 if (err) throw err;
                 init();
         });
