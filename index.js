@@ -10,6 +10,7 @@ var roleArr = [];
 var employeeObjArr = [];
 var employeeArrNone = ["None"];
 var employeeArr = [];
+var employeeDummyArr = [];
 
 var connection = mysql.createConnection({
   host: "localhost",
@@ -165,9 +166,9 @@ function readTrackerDB() {
         // departmentObjArr = [];
         // departmentArr = [];
         for (let i = 0; i < res.length; i++) {
-            if (departmentObjArr[i].department.indexOf(res[i].department) === -1) {
-                departmentObjArr.push(res[i]);
-            }
+            // if (departmentObjArr[i].department.indexOf(res[i].department) === -1) {
+            //     departmentObjArr.push(res[i]);
+            // }
             // departmentObjArr.push(res[i]);
             if (departmentArr.indexOf(res[i].department) === -1) {
                 departmentArr.push(res[i].department);
@@ -185,9 +186,9 @@ function readTrackerDB() {
         // roleObjArr = [];
         // roleArr = [];
         for (let i = 0; i < res.length; i++) {
-            roleObjArr.push(res[i]);
             if (roleArr.indexOf(res[i].title) === -1) {
                 roleArr.push(res[i].title);
+                roleObjArr.push(res[i]);
             }
         }
         // console.log(roleArr);
@@ -199,7 +200,10 @@ function readTrackerDB() {
         if (err) throw err;
         // employeeObjArr = [];
         for (let i = 0; i < res.length; i++) {
-            employeeObjArr.push(res[i]);
+            if (employeeDummyArr.indexOf(res[i].first_name) === -1) {
+                employeeObjArr.push(res[i]);
+                employeeDummyArr.push(res[i].first_name);
+            }
         }
         // console.log(employeeObjArr);
     });

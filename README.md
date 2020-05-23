@@ -1,9 +1,13 @@
 # Employee-Tracker
 A node command-line application for keeping track of employees
 
+
 ![Gif Demonstration]()
 
+
 ## Table of Contents 
+
+* [Description](#description)
 
 * [Installation](#installation)
 
@@ -16,14 +20,20 @@ A node command-line application for keeping track of employees
 * [Questions](#questions)
 
 
+## Description
+
+I yeam desc.
+Find a video demonstration [here]()
+
 ## Installation
+
 To install necessary dependencies run the following command:
 ````
 npm i
 ````
-Next, run the schema.sql file in MySql Workbench to create the database.        
-Finally, navigate to .env to add your mysql password.        
-You are now ready to use the application!
+Next, navigate to .env to add your mysql password.        
+Finally, run the schema.sql file in MySql Workbench to create the database.
+
 
 ## Usage
 
@@ -31,7 +41,7 @@ To start the application, run
 ````
 node server.js
 ````
-You will be able to do any of the following options with the database: 
+You will be able to do any of the following options to manipulate the database: 
 - "Add Department"
 - "Add Role"
 - "Add Employee"
@@ -52,15 +62,20 @@ You will be able to do any of the following options with the database:
 ## Technologies
                            
 - [Node.js](https://nodejs.org/)
-- [Inquirer](https://www.npmjs.com/package/inquirer)                                               
-- [MySql](https://www.npmjs.com/package/mysql)
+- [Inquirer (npm package)](https://www.npmjs.com/package/inquirer)                                               
+- [MySql (npm package)](https://www.npmjs.com/package/mysql)
 - [MySql Workbench](https://www.mysql.com/)
-- [Console.Table](https://www.npmjs.com/package/console.table)
+- [Console.Table (npm package)](https://www.npmjs.com/package/console.table)
 - [Bootstrap](https://getbootstrap.com/)
 
+
 ## Languages/Libraries
+
 - JavaScript
 - MySql
+- HTML
+- CSS
+
 
 ## Questions
 
