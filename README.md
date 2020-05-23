@@ -31,7 +31,7 @@ To install necessary dependencies run the following command:
 ````
 npm i
 ````
-Next, navigate to .env to add your mysql password.        
+Next, navigate to .env to define your enviromental variables.        
 Finally, run the schema.sql file in MySql Workbench to create the database.
 
 
@@ -51,6 +51,7 @@ You will be able to do any of the following options to manipulate the database:
 - "View All Employees By Manager"
 - "View Roles"
 - "View Departments"
+- "View a Department's Budget"
 - "Update Employee's Role"
 - "Update Employee's Manager"
 - "Remove Employee"

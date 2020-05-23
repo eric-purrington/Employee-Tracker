@@ -3,6 +3,7 @@ const inquirer = require("inquirer");
 const cTable = require('console.table');
 require("dotenv").config();
 
+// Empty-ish arrays for manipulating database on a smaller scale
 var departmentObjArr = [];
 var departmentArr = [];
 var roleObjArr = [];
@@ -13,9 +14,9 @@ var employeeArr = [];
 var employeeDummyArr = [];
 
 var connection = mysql.createConnection({
-  host: "localhost",
-  port: 3306,
-  user: "root",
+  host: process.env.MYSQL_HOST,
+  port: process.env.MYSQL_PORT,
+  user: process.env.MYSQL_USER,
   password: process.env.MYSQL_PASSWORD,
   database: "employeeTrackerDB",
 });
@@ -25,8 +26,9 @@ connection.connect(function(err) {
     init();
 });
 
-const startScreenOptions = ["Add Department", "Add Role", "Add Employee", "View All Employees", "View All Employees By Department", "View All Employees By Role", "View All Employees By Manager", "View Roles", "View Departments", "Update Employee's Role", "Update Employee's Manager", "Remove Employee", "Remove Department", "Remove Role", "Exit"];
+const startScreenOptions = ["Add Department", "Add Role", "Add Employee", "View All Employees", "View All Employees By Department", "View All Employees By Role", "View All Employees By Manager", "View Roles", "View Departments", "View a Department's Budget", "Update Employee's Role", "Update Employee's Manager", "Remove Employee", "Remove Department", "Remove Role", "Exit"];
 
+// Questions
 const startScreenQ = {
     type: "list",
     name: "todo",
@@ -100,31 +102,38 @@ const viewByManagerQ = {
     choices: employeeArr
 };
 
+const viewTotalUtilizedBudgetQ = {
+    type: "list",
+    name: "toViewDepartmentTotal",
+    message: "Which department's total utilized budget which you like to see?",
+    choices: departmentArr
+};
+
 const updateEmployeeRoleQs = [
     {
-    type: "list",
-    name: "toUpdateEmployee",
-    message: "Which employee would you like to update?",
-    choices: employeeArr
+        type: "list",
+        name: "toUpdateEmployee",
+        message: "Which employee would you like to update?",
+        choices: employeeArr
     }, {
-    type: "list",
-    name: "toUpdateEmployeeRole",
-    message: "What is the employee's role?",
-    choices: roleArr
+        type: "list",
+        name: "toUpdateEmployeeRole",
+        message: "What is the employee's role?",
+        choices: roleArr
     }
 ];
 
 const updateEmployeeManagerQs = [
     {
-    type: "list",
-    name: "toUpdateEmployee",
-    message: "Which employee would you like to update?",
-    choices: employeeArr
+        type: "list",
+        name: "toUpdateEmployee",
+        message: "Which employee would you like to update?",
+        choices: employeeArr
     }, {
-    type: "list",
-    name: "toUpdateEmployeeManager",
-    message: "Who is the employee's manager?",
-    choices: employeeArrNone
+        type: "list",
+        name: "toUpdateEmployeeManager",
+        message: "Who is the employee's manager?",
+        choices: employeeArrNone
     }
 ];
 
@@ -149,91 +158,51 @@ const removeRoleQ = {
     choices: roleArr
 };
 
-
-// function eraseTrackerDBArrays() {
-//     departmentObjArr = [];
-//     departmentArr = [];
-//     roleObjArr = [];
-//     roleArr = [];
-//     employeeObjArr = [];
-//     employeeArrNone = ["None"];
-//     employeeArr = [];
-// }
-
+// Reads DB and pushes info into previously empty arrays
 function readTrackerDB() {
     connection.query("SELECT * FROM departments", function (err, res) {
         if (err) throw err;
-        // departmentObjArr = [];
-        // departmentArr = [];
         for (let i = 0; i < res.length; i++) {
-            // if (departmentObjArr[i].department.indexOf(res[i].department) === -1) {
-            //     departmentObjArr.push(res[i]);
-            // }
-            // departmentObjArr.push(res[i]);
             if (departmentArr.indexOf(res[i].department) === -1) {
                 departmentArr.push(res[i].department);
-                // ?????????????????? maybemaybemaybe
                 departmentObjArr.push(res[i]);
             }
         }
-        // console.log(departmentArr);
     });
-// }
 
-// function readRoles() {
     connection.query("SELECT * FROM roles", function (err, res) {
         if (err) throw err;
-        // roleObjArr = [];
-        // roleArr = [];
         for (let i = 0; i < res.length; i++) {
             if (roleArr.indexOf(res[i].title) === -1) {
                 roleArr.push(res[i].title);
                 roleObjArr.push(res[i]);
             }
         }
-        // console.log(roleArr);
     });
-// }
 
-// function readEmployees1() {
     connection.query("SELECT * FROM employees", function (err, res) {
         if (err) throw err;
-        // employeeObjArr = [];
         for (let i = 0; i < res.length; i++) {
             if (employeeDummyArr.indexOf(res[i].first_name) === -1) {
                 employeeObjArr.push(res[i]);
                 employeeDummyArr.push(res[i].first_name);
             }
         }
-        // console.log(employeeObjArr);
     });
-// }
 
-// function readEmployees2() {
     connection.query("SELECT CONCAT(first_name, ' ', last_name) AS fullname FROM employees", function (err, res) {
         if (err) throw err;
-        // employeeArrNone = ["None"];
-        // employeeArr = [];
         for (let i = 0; i < res.length; i++) {
             if (employeeArrNone.indexOf(res[i].fullname) === -1 && employeeArr.indexOf(res[i].fullname) === -1) {
                 employeeArrNone.push(res[i].fullname);
                 employeeArr.push(res[i].fullname);
             }
         }
-        // console.log(employeeArrNone);
     });
 }
 
 function init() {
-    // readDepartments();
-    // eraseTrackerDBArrays();
     readTrackerDB();
-    // console.log(departmentArr);
-    // readRoles();
-
-    // readEmployees1();
-
-    // readEmployees2();
 
     inquirer.prompt(startScreenQ).then(answer => {
         switch (answer.todo) {
@@ -265,21 +234,24 @@ function init() {
                 viewDepartments();
                 break;
             case startScreenOptions[9]:
-                updateEmployeeRole();
+                viewTotalUtilizedBudget();
                 break;
             case startScreenOptions[10]:
-                updateEmployeeManager();
+                updateEmployeeRole();
                 break;
             case startScreenOptions[11]:
-                removeEmployee();
+                updateEmployeeManager();
                 break;
             case startScreenOptions[12]:
-                removeDepartment();
+                removeEmployee();
                 break;
             case startScreenOptions[13]:
-                removeRole();
+                removeDepartment();
                 break;
             case startScreenOptions[14]:
+                removeRole();
+                break;
+            case startScreenOptions[15]:
                 console.log("Bye!");
                 connection.end();
                 break;
@@ -363,6 +335,7 @@ function viewAllEmployees() {
 
     connection.query(query, function (err, res) {
         if (err) throw err;
+        console.log("\n");
         console.table(res);
         init();
     });
@@ -374,6 +347,7 @@ function viewAllEmployeesByDepartment() {
 
         connection.query(query, { department: answer.toViewByDepartment }, function (err, res) {
             if (err) throw err;
+            console.log("\n");
             console.table(res);
             init();
         });
@@ -386,6 +360,7 @@ function viewAllEmployeesByRole() {
 
         connection.query(query, { title: answer.toViewByRole }, function (err, res) {
             if (err) throw err;
+            console.log("\n");
             console.table(res);
             init();
         });
@@ -403,9 +378,9 @@ function viewAllEmployeesByManager() {
 
         let query = "SELECT a.id, a.first_name, a.last_name, title, department, salary, CONCAT(b.first_name, ' ', b.last_name) AS manager FROM employees a JOIN roles ON role_id=roles.id JOIN departments ON department_id=departments.id LEFT JOIN employees b on a.manager_id=b.id WHERE a.manager_id =" + toViewByManagerID;
 
-
         connection.query(query, function (err, res) {
             if (err) throw err;
+            console.log("\n");
             console.table(res);
             init();
         });
@@ -413,8 +388,9 @@ function viewAllEmployeesByManager() {
 }
 
 function viewRoles() {
-    connection.query("SELECT * FROM roles", function (err, res) {
+    connection.query("SELECT roles.id, title, salary, department FROM roles JOIN departments ON department_id=departments.id", function (err, res) {
         if (err) throw err;
+        console.log("\n");
         console.table(res);
         init();
     });
@@ -423,11 +399,22 @@ function viewRoles() {
 function viewDepartments() {
     connection.query("SELECT * FROM departments", function (err, res) {
         if (err) throw err;
+        console.log("\n");
         console.table(res);
         init();
     });
 }
 
+function viewTotalUtilizedBudget() {
+    inquirer.prompt(viewTotalUtilizedBudgetQ).then(answer => {
+        connection.query("SELECT SUM(salary) AS total_utilized_budget FROM employees JOIN roles ON role_id=roles.id JOIN departments ON department_id=departments.id WHERE ?", { department: answer.toViewDepartmentTotal }, function (err, res) {
+            if (err) throw err;
+            console.log("\n");
+            console.table(res);
+            init();
+        })
+    })
+}
 function updateEmployeeRole() {
     inquirer.prompt(updateEmployeeRoleQs).then(answers => {
 
@@ -482,6 +469,7 @@ function updateEmployeeManager() {
     });
 }
 
+// Remove functions empty arrays used for temp storage
 function removeEmployee() {
     inquirer.prompt(removeEmployeeQ).then(answer => {
         connection.query("DELETE FROM employees WHERE ? AND ?",
@@ -489,11 +477,15 @@ function removeEmployee() {
                 {
                     first_name: answer.toRemoveEmployee.split(" ")[0]
                 }, {
-                    last_name: answers.toRemoveEmployee.split(" ")[1]
+                    last_name: answer.toRemoveEmployee.split(" ")[1]
                 }
             ],
             function (err, res) {
                 if (err) throw err;
+                employeeObjArr = [];
+                employeeArrNone = ["None"];
+                employeeArr = [];
+                employeeDummyArr = [];
                 init();
         });
     });
@@ -506,6 +498,8 @@ function removeDepartment() {
                 department: answer.toRemoveDepartment
             }, function (err, res) {
                 if (err) throw err;
+                departmentObjArr = [];
+                departmentArr = [];
                 init();
         });
     });
@@ -518,6 +512,8 @@ function removeRole() {
                 title: answer.toRemoveRole
             }, function (err, res) {
                 if (err) throw err;
+                roleObjArr = [];
+                roleArr = [];
                 init();
         });
     });
