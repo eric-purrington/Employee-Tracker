@@ -148,53 +148,83 @@ const removeRoleQ = {
     choices: roleArr
 };
 
-function readDepartments() {
+
+// function eraseTrackerDBArrays() {
+//     departmentObjArr = [];
+//     departmentArr = [];
+//     roleObjArr = [];
+//     roleArr = [];
+//     employeeObjArr = [];
+//     employeeArrNone = ["None"];
+//     employeeArr = [];
+// }
+
+function readTrackerDB() {
     connection.query("SELECT * FROM departments", function (err, res) {
         if (err) throw err;
+        // departmentObjArr = [];
+        // departmentArr = [];
         for (let i = 0; i < res.length; i++) {
             departmentObjArr.push(res[i]);
-            departmentArr.push(res[i].department);
+            if (departmentArr.indexOf(res[i].department) === -1) {
+                departmentArr.push(res[i].department);
+            }
         }
+        // console.log(departmentArr);
     });
-}
+// }
 
-function readRoles() {
+// function readRoles() {
     connection.query("SELECT * FROM roles", function (err, res) {
         if (err) throw err;
+        // roleObjArr = [];
+        // roleArr = [];
         for (let i = 0; i < res.length; i++) {
             roleObjArr.push(res[i]);
-            roleArr.push(res[i].title);
+            if (roleArr.indexOf(res[i].title) === -1) {
+                roleArr.push(res[i].title);
+            }
         }
+        // console.log(roleArr);
     });
-}
+// }
 
-function readEmployees1() {
+// function readEmployees1() {
     connection.query("SELECT * FROM employees", function (err, res) {
         if (err) throw err;
+        // employeeObjArr = [];
         for (let i = 0; i < res.length; i++) {
             employeeObjArr.push(res[i]);
         }
+        // console.log(employeeObjArr);
     });
-}
+// }
 
-function readEmployees2() {
+// function readEmployees2() {
     connection.query("SELECT CONCAT(first_name, ' ', last_name) AS fullname FROM employees", function (err, res) {
         if (err) throw err;
+        // employeeArrNone = ["None"];
+        // employeeArr = [];
         for (let i = 0; i < res.length; i++) {
-            employeeArrNone.push(res[i].fullname);
-            employeeArr.push(res[i].fullname);
+            if (employeeArrNone.indexOf(res[i].fullname) === -1 && employeeArr.indexOf(res[i].fullname) === -1) {
+                employeeArrNone.push(res[i].fullname);
+                employeeArr.push(res[i].fullname);
+            }
         }
+        // console.log(employeeArrNone);
     });
 }
 
 function init() {
-    readDepartments();
+    // readDepartments();
+    // eraseTrackerDBArrays();
+    readTrackerDB();
+    // console.log(departmentArr);
+    // readRoles();
 
-    readRoles();
+    // readEmployees1();
 
-    readEmployees1();
-
-    readEmployees2();
+    // readEmployees2();
 
     inquirer.prompt(startScreenQ).then(answer => {
         switch (answer.todo) {
@@ -398,7 +428,7 @@ function updateEmployeeRole() {
             }
         }
     
-        connection.query("UPDATE employees SET ? WHERE ?",
+        connection.query("UPDATE employees SET ? WHERE ? AND ?",
             [
                 {
                     role_id: toUpdateEmployeeRoleID
@@ -426,7 +456,7 @@ function updateEmployeeManager() {
             }
         }
     
-        connection.query("UPDATE employees SET ? WHERE ? and ?",
+        connection.query("UPDATE employees SET ? WHERE ? AND ?",
             [
                 {
                     manager_id: toUpdateEmployeeManagerID
@@ -445,7 +475,7 @@ function updateEmployeeManager() {
 
 function removeEmployee() {
     inquirer.prompt(removeEmployeeQ).then(answer => {
-        connection.query("DELETE FROM employees WHERE ? and ?",
+        connection.query("DELETE FROM employees WHERE ? AND ?",
             [
                 {
                     first_name: answer.toRemoveEmployee.split(" ")[0]
